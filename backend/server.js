@@ -24,6 +24,8 @@ const url = "mongodb+srv://"+mongo_user+":"+mongo_password+"@"+mongo_url+
 "/place?retryWrites=true&w=majority&appName=TestiKlusteri";
 //Tietokantaan tulee place niminen namespace
 
+app.use("/",express.static("public")) //for cylic app hosting
+
 mongoose.connect(url).then(
 	() => console.log("Connected to MongoDB"),
 	(err) => console.log("Failed to connect to MongoDB. Reason ",err)
