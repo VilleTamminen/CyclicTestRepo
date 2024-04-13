@@ -1,7 +1,12 @@
 import {Link} from 'react-router-dom';
 
 const NavBar = (props) => {
-    //jos on logged in, näytä canvas app
+    //jos on logged in, näytä canvas app. 
+    /*
+        <li className='nav-item' style={{marginLeft:10}}>
+            <Link to="/deleteUser" className='nav-link' >Delete user account</Link>
+        </li>
+    */
     if(props.isLogged){
         return (
             <nav className='navbar navbar-expand-lg navbar-light bg-light'>
@@ -10,9 +15,6 @@ const NavBar = (props) => {
                     <li className='nav-item' style={{marginLeft:10}}>
                         <Link to="/" className='nav-link'>Home page</Link>
                     </li>
-                    <li className='nav-item' style={{marginLeft:10}}>
-                        <Link to="/form" className='nav-link'>shopping form</Link>
-                    </li>  
                     <li className='nav-item' style={{marginLeft:10}}>
                         <Link to="/global" className='nav-link'>go to Global canvas</Link>
                     </li>       

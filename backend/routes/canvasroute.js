@@ -7,13 +7,9 @@ let router = express.Router();
 
 //------------GLOBAL CANVAS STUFF--------------------------------------------------
 
-//Global canvas?
-router.get("/place/global",function(req,res) {
-	let query = {"user":req.session.user}
-	if(req.query.type) {
-		query.type = req.query.type
-	}
-	squareModel.find(query).then(function(squares) {
+router.get("/place",function(req,res) {
+   //Etsi kaikki squaret
+	squareModel.find().then(function(squares) {
 		return res.status(200).json(squares)
 	}).catch(function(err) {
 		console.log(err);
@@ -21,23 +17,46 @@ router.get("/place/global",function(req,res) {
 	})
 })
 
-//Global square edit
-router.put("/global/:id",function(req,res) {
+//For testing. Tämä toimii
+router.get("/place/:id",function(req,res) {
+    //Etsi tietty square
+    squareModel.find({"id":req.params.id}).then(function(squares) {
+        return res.status(200).json(squares)
+    }).catch(function(err) {
+        console.log(err);
+        return res.status(500).json({"Message":"Internal server error"})
+    })
+})
+
+//Global square edit. 
+router.put("/place/:id",function(req,res) {
 	if(!req.body) {
-		return res.status(400).json({"Message":"Bad Request"})
+		return res.status(400).json({"Message":"Bad Request. no body"})
 	}
-	if(!req.body.type) {
-		return res.status(400).json({"Message":"Bad Request"})
-	}
+    if(!req.body.id) {
+		return res.status(400).json({"Message":"Bad Request. no body.id"})
+	} 
     //ei tehdä uutta squareModelia.
+    //"username":req.session.user,
 	let square = {
-		"username":req.session.user.username,
+        "id":req.body.id,
+		"username":req.session.user,
 		"color":req.body.color,
-		"coordX":req.body.coorX,
+		"coordX":req.body.coordX,
 		"coordY":req.body.coordY,
         "datetime":req.body.datetime,
 	}
-	squareModel.replaceOne({"_id":req.params.id,"user":req.session.user},square).then(function(stats) {
+    //otin alaviivan pois id:sta enkä etsi userin omia.
+	squareModel.replaceOne({"id":req.params.id},square).then(function(stats) {
+		return res.status(200).json({"Message":"Success"})
+	}).catch(function(err) {
+		console.log(err);
+		return res.status(500).json({"Message":"Internal server error"})
+	})
+})
+
+router.delete("/place/:id",function(req,res) {
+	squareModel.deleteOne({"_id":req.params.id,"user":req.session.user}).then(function(stats) {
 		return res.status(200).json({"Message":"Success"})
 	}).catch(function(err) {
 		console.log(err);
@@ -46,7 +65,7 @@ router.put("/global/:id",function(req,res) {
 })
 
 //----------PRIVATE CANVAS STUFF-------------------------------------------
-
+/*
 //private canvas ?
 router.get("/place",function(req,res) {
 	let query = {"user":req.session.user}
@@ -118,6 +137,6 @@ router.put("/place/:id",function(req,res) {
 		return res.status(500).json({"Message":"Internal server error"})
 	})
 })
-
+*/
 
 module.exports = router;

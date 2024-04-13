@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-//const shoppingRoute = require('./routes/shoppingroute');
 const canvasRoute = require('./routes/canvasroute');
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
@@ -23,8 +22,6 @@ const mongo_password = process.env.MONGODB_PASSWORD;
 const url = "mongodb+srv://"+mongo_user+":"+mongo_password+"@"+mongo_url+
 "/place?retryWrites=true&w=majority&appName=TestiKlusteri";
 //Tietokantaan tulee place niminen namespace
-
-app.use("/",express.static("public")) //for cylic app hosting
 
 mongoose.connect(url).then(
 	() => console.log("Connected to MongoDB"),
@@ -160,6 +157,7 @@ app.post("/logout",function(req,res) {
         return res.status(500).json({"Message":"Internal server error"})
     })
 })
+
 
 //user täytyy olla logged in että voi käyttää mitään
 app.use("/api",isUserLogged,canvasRoute);
